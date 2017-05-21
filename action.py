@@ -328,17 +328,13 @@ class playRadio(object):
 
     def get_station(self, station_name):
         stations = {
-            '1': 'http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_high/ak/bbc_radio_one.m3u8',
-            '2': 'http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_high/ak/bbc_radio_two.m3u8',
-            '3': 'http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_high/ak/bbc_radio_three.m3u8',
-            '4': 'http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_high/ak/bbc_radio_fourfm.m3u8',
-            '5': 'http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_high/ak/bbc_radio_five_live.m3u8',
-            '5 sports': 'http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_high/ak/bbc_radio_five_live_sports_extra.m3u8',
-            '6': 'http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_high/ak/bbc_6music.m3u8',
-            '1xtra': 'http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_high/ak/bbc_radio_1xtra.m3u8',
-            '4 extra': 'http://bbcmedia.ic.llnwd.net/stream/bbcmedia_radio1xtra_mf_p?s=1494265403',
-            'nottingham': 'http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_high/ak/bbc_radio_nottingham.m3u8',
-                    }
+            'bolivia':"http://realserver5.megalink.com:8070",
+            'france culture': 'http://direct.franceculture.fr/live/franceculture-midfi.mp3',
+            'nostalgy':"http://cdn.nrjaudio.fm/audio1/fr/40039/aac_64.mp3",
+            'jazz':"http://jazz-wr01.ice.infomaniak.ch/jazz-wr01-128.mp3",
+            'classic':"http://classiquefm.ice.infomaniak.ch/classiquefm.mp3",
+            'bbc': 'http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_high/ak/bbc_radio_one.m3u8'
+            }
         return stations[station_name]
 
     def run(self, voice_command):
@@ -360,7 +356,7 @@ class playRadio(object):
         except KeyError:
             # replace this stream with the stream for your default station
             self.say("Radio search not found. Playing radio 6")
-            station = 'http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_high/ak/bbc_6music.m3u8'
+            station = 'http://direct.franceculture.fr/live/franceculture-midfi.mp3'
         logging.info("stream " + station)
 
         media = self.instance.media_new(station)
@@ -401,12 +397,9 @@ class playPodcast(object):
     def get_url(self, podcast_name):
         # add the rss feeds for the podcasts
         urls = {
-            'friday night comedy': 'http://www.bbc.co.uk/programmes/p02pc9pj/episodes/downloads.rss',
             'tech news today': 'http://feeds.twit.tv/tnt.xml',
-            'twig': 'http://feeds.twit.tv/twig.xml',
-            'this week in tech': 'http://feeds.twit.tv/twit.xml',
-            'theory of everything': 'https://www.npr.org/rss/podcast.php?id=510061',
-            'this american life': 'http://feed.thisamericanlife.org/talpodcast',
+            'france culture': 'feed://radiofrance-podcast.net/podcast09/rss_10351.xml',
+            'nature':'http://feeds.nature.com/nature/podcast/current'
             }
         return urls[podcast_name]
 
