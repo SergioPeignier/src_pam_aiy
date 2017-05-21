@@ -22,7 +22,7 @@ import time
 import feedparser
 import random
 import threading
-
+import feedparser
 import actionbase
 
 # =============================================================================
@@ -232,7 +232,7 @@ class setTimer(object):
 # ================================
 # Shuts down the pi or reboots with a response
 #
-# http://fluxradios.blogspot.fr/2014/07/flux-url-nostalgie-france.html
+
 class PowerCommand(object):
     """Shutdown or reboot the pi"""
 
@@ -250,6 +250,63 @@ class PowerCommand(object):
         else:
             logging.error("Error identifying power command.")
             self.say("Sorry I didn't identify that command")
+
+
+
+#this is the class to read rss feeds (add under the section of "Makers! Implement your own actions here")
+class ReadRssFeed(object):
+    # This is the bbc rss feed for top news in the uk
+    # http://feeds.bbci.co.uk/news/rss.xml?edition=uk#
+
+    #######################################################################################
+    # constructor
+    # url - rss feed url to read
+    # feedCount - number of records to read
+    # -(for example bbc rss returns around 62 items and you may not want all of
+    # them read out so this allows limiting
+    #######################################################################################
+    def __init__(self, say, url, feedCount):
+        self.say = say
+        self.rssFeedUrl = url
+        self.feedCount = feedCount
+
+    def run(self, voice_command):
+        res = self.getNewsFeed()
+        # If res is empty then let user know
+        if res == "":
+            self.say('Cannot get the feed')
+
+        # loop res and speak the title of the rss feed
+        # here you could add further fields to read out
+        for item in res:
+            self.say(item.title_detail.value)
+
+    def getNewsFeed(self):
+        # parse the feed and get the result in res
+        res = feedparser.parse(self.rssFeedUrl)
+
+        # get the total number of entries returned
+        resCount = len(res.entries)
+
+        # exit out if empty
+        if resCount == 0:
+            return ""
+
+        # if the resCount is less than the feedCount specified cap the feedCount to the resCount
+        if resCount < self.feedCount:
+            self.feedCount = resCount
+
+        # create empty array
+        resultList = []
+
+        # loop from 0 to feedCount so we append the right number of entries to the return list
+        for x in range(0,self.feedCount):
+            resultList.append(res.entries[x])
+    
+        return resultList
+
+
+
 
 class playRadio(object):
 
@@ -271,12 +328,17 @@ class playRadio(object):
 
     def get_station(self, station_name):
         stations = {
-            'bolivia':"http://realserver5.megalink.com:8070",
-            'france culture': 'http://direct.franceculture.fr/live/franceculture-midfi.mp3',
-            'nostalgy':"http://cdn.nrjaudio.fm/audio1/fr/40039/aac_64.mp3",
-            'jazz':"http://jazz-wr01.ice.infomaniak.ch/jazz-wr01-128.mp3",
-            'classic':"http://classiquefm.ice.infomaniak.ch/classiquefm.mp3",
-            'bbc': 'http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_high/ak/bbc_radio_one.m3u8'}
+            '1': 'http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_high/ak/bbc_radio_one.m3u8',
+            '2': 'http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_high/ak/bbc_radio_two.m3u8',
+            '3': 'http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_high/ak/bbc_radio_three.m3u8',
+            '4': 'http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_high/ak/bbc_radio_fourfm.m3u8',
+            '5': 'http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_high/ak/bbc_radio_five_live.m3u8',
+            '5 sports': 'http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_high/ak/bbc_radio_five_live_sports_extra.m3u8',
+            '6': 'http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_high/ak/bbc_6music.m3u8',
+            '1xtra': 'http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_high/ak/bbc_radio_1xtra.m3u8',
+            '4 extra': 'http://bbcmedia.ic.llnwd.net/stream/bbcmedia_radio1xtra_mf_p?s=1494265403',
+            'nottingham': 'http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_high/ak/bbc_radio_nottingham.m3u8',
+                    }
         return stations[station_name]
 
     def run(self, voice_command):
@@ -298,7 +360,7 @@ class playRadio(object):
         except KeyError:
             # replace this stream with the stream for your default station
             self.say("Radio search not found. Playing radio 6")
-            station = 'http://direct.franceculture.fr/live/franceculture-midfi.mp3'
+            station = 'http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_high/ak/bbc_6music.m3u8'
         logging.info("stream " + station)
 
         media = self.instance.media_new(station)
@@ -339,8 +401,12 @@ class playPodcast(object):
     def get_url(self, podcast_name):
         # add the rss feeds for the podcasts
         urls = {
-            'france culture': 'feed://radiofrance-podcast.net/podcast09/rss_10351.xml',
-            'nature':'http://feeds.nature.com/nature/podcast/current'
+            'friday night comedy': 'http://www.bbc.co.uk/programmes/p02pc9pj/episodes/downloads.rss',
+            'tech news today': 'http://feeds.twit.tv/tnt.xml',
+            'twig': 'http://feeds.twit.tv/twig.xml',
+            'this week in tech': 'http://feeds.twit.tv/twit.xml',
+            'theory of everything': 'https://www.npr.org/rss/podcast.php?id=510061',
+            'this american life': 'http://feed.thisamericanlife.org/talpodcast',
             }
         return urls[podcast_name]
 
@@ -474,6 +540,8 @@ def make_actor(say):
     actor.add_keyword(_('set timer'), setTimer(say,_('set timer for ')))
     actor.add_keyword(_('set a timer'), setTimer(say,_('set a timer for ')))
     actor.add_keyword(_('radio'), playRadio(say, _('Radio')))
+
+    actor.add_keyword(_('the news'), ReadRssFeed(say, "http://feeds.bbci.co.uk/news/rss.xml?edition=uk#",10))
 
     return actor
 
