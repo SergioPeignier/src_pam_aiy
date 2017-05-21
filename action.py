@@ -329,7 +329,7 @@ class playRadio(object):
     def get_station(self, station_name):
         stations = {
             'bolivia':"http://realserver5.megalink.com:8070",
-            'france culture': 'http://direct.franceculture.fr/live/franceculture-midfi.mp3',
+            'france c': 'http://direct.franceculture.fr/live/franceculture-midfi.mp3',
             'nostalgy':"http://cdn.nrjaudio.fm/audio1/fr/40039/aac_64.mp3",
             'jazz':"http://jazz-wr01.ice.infomaniak.ch/jazz-wr01-128.mp3",
             'classic':"http://classiquefm.ice.infomaniak.ch/classiquefm.mp3",
@@ -355,7 +355,7 @@ class playRadio(object):
             station = self.get_station(voice_command)
         except KeyError:
             # replace this stream with the stream for your default station
-            self.say("Radio search not found. Playing radio 6")
+            self.say("Radio search not found. Playing radio france culture")
             station = 'http://direct.franceculture.fr/live/franceculture-midfi.mp3'
         logging.info("stream " + station)
 
