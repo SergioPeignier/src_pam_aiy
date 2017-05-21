@@ -330,11 +330,11 @@ class playRadio(object):
         print("looking for radio : "+station_name)
         stations = {
             'radio bolivia':"http://realserver5.megalink.com:8070",
-            'france c': 'http://direct.franceculture.fr/live/franceculture-midfi.mp3',
-            'nostalgy':"http://cdn.nrjaudio.fm/audio1/fr/40039/aac_64.mp3",
-            'jazz':"http://jazz-wr01.ice.infomaniak.ch/jazz-wr01-128.mp3",
-            'classic':"http://classiquefm.ice.infomaniak.ch/classiquefm.mp3",
-            'bbc': 'http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_high/ak/bbc_radio_one.m3u8'
+            'radio france culture': 'http://direct.franceculture.fr/live/franceculture-midfi.mp3',
+            'radio nostalgy':"http://cdn.nrjaudio.fm/audio1/fr/40039/aac_64.mp3",
+            'radio jazz':"http://jazz-wr01.ice.infomaniak.ch/jazz-wr01-128.mp3",
+            'radio classic':"http://classiquefm.ice.infomaniak.ch/classiquefm.mp3",
+            'radio bbc': 'http://a.files.bbci.co.uk/media/live/manifesto/audio/simulcast/hls/uk/sbr_high/ak/bbc_radio_one.m3u8'
             }
         return stations[station_name]
 
