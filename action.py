@@ -327,8 +327,9 @@ class playRadio(object):
         return radioState
 
     def get_station(self, station_name):
+        print("looking for radio : "+station_name)
         stations = {
-            'bolivia':"http://realserver5.megalink.com:8070",
+            'radio bolivia':"http://realserver5.megalink.com:8070",
             'france c': 'http://direct.franceculture.fr/live/franceculture-midfi.mp3',
             'nostalgy':"http://cdn.nrjaudio.fm/audio1/fr/40039/aac_64.mp3",
             'jazz':"http://jazz-wr01.ice.infomaniak.ch/jazz-wr01-128.mp3",
